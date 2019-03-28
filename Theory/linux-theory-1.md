@@ -1,16 +1,21 @@
-Paging
+페이징
 ================================================================================
 
-Introduction
+소개
 --------------------------------------------------------------------------------
 
-In the fifth [part](https://0xax.gitbooks.io/linux-insides/content/Booting/linux-bootstrap-5.html) of the series `Linux kernel booting process` we learned about what the kernel does in its earliest stage. In the next step the kernel will initialize different things like `initrd` mounting, lockdep initialization, and many many other things, before we can see how the kernel runs the first init process.
+`Linux kernel booting process` 시리즈의 다섯 번째 [part](https : //0xax.gitbooks.io/linux-insides/content/Booting/linux-bootstrap-5.html)에서
+우리는 커널이 가장 초기 단계에서 무엇을하는지에 대해 배웠습니다. 다음 단계에서 커널은 첫 번째 init 프로세스를 실행하기 전에 `initrd` 마운트, lockdep 초기화, 그리고 많은 다른 것들을
+초기화합니다. 
 
-Yeah, there will be many different things, but many many and once again many work with **memory**.
+그래요, 많은 일들이 일어 날 것인데 많고 많은 아주 많은 일들이 **메모리**에서 일어날 것입니다.
 
-In my view, memory management is one of the most complex parts of the Linux kernel and in system programming in general. This is why we need to get acquainted with paging, before we proceed with the kernel initialization stuff.
+제 견해로는, 시스템 프로그래밍과 리눅스 커널에서는 메모리 관리가 가장 복잡한 부분 중에 하나입니다. 이것이 커널 초기화 부분을 더 배우기 전에 우리가 페이징에 익숙해져야 하는 이유입니다.
 
 `Paging` is a mechanism that translates a linear memory address to a physical address. If you have read the previous parts of this book, you may remember that we saw segmentation in real mode when physical addresses are calculated by shifting a segment register by four and adding an offset. We also saw segmentation in protected mode, where we used the descriptor tables and base addresses from descriptors with offsets to calculate the physical addresses. Now we will see paging in 64-bit mode.
+
+`페이징`은 선형 메모리 주소를 물리 주소로 변환하는 메커니즘입니다. 이 책의 이번 부분을 읽었다면 -----------------여기 번역 중
+
 
 As the Intel manual says:
 
