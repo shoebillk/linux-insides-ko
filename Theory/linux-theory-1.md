@@ -35,7 +35,7 @@
 
 * `CR0.PG` 비트 셋팅;
 * `CR4.PAE` 비트 셋팅;
-* `IA32_EFER.LME` 비트 셋팅 .
+* `IA32_EFER.LME` 비트 셋팅.
 
 
 우리는 이미 [arch/x86/boot/compressed/head_64.S](https://github.com/torvalds/linux/blob/16f73eb02d7e1765ccab3d2018e0bd98eb93d973/arch/x86/boot/compressed/head_64.S)에서 이 비트들을 보았습니다:
@@ -46,7 +46,7 @@ movl	$(X86_CR0_PG | X86_CR0_PE), %eax
 movl	%eax, %cr0
 ```
 
-and
+그리고
 
 ```assembly
 movl	$MSR_EFER, %ecx
@@ -55,10 +55,12 @@ btsl	$_EFER_LME, %eax
 wrmsr
 ```
 
-Paging structures
+페이징 구조체
 --------------------------------------------------------------------------------
 
 Paging divides the linear address space into fixed-size pages. Pages can be mapped into the physical address space or external storage. This fixed size is `4096` bytes for the `x86_64` Linux kernel. To perform the translation from linear address to physical address, special structures are used. Every structure is `4096` bytes and contains `512` entries (this only for `PAE` and `IA32_EFER.LME` modes). Paging structures are hierarchical and the Linux kernel uses 4 level of paging in the `x86_64` architecture. The CPU uses a part of linear addresses to identify the entry in another paging structure which is at the lower level, physical memory region (`page frame`) or physical address in this region (`page offset`). The address of the top level paging structure located in the `cr3` register. We have already seen this in [arch/x86/boot/compressed/head_64.S](https://github.com/torvalds/linux/blob/16f73eb02d7e1765ccab3d2018e0bd98eb93d973/arch/x86/boot/compressed/head_64.S):
+
+페이징은 선형 주소 공간을 고정 크기의 페이지들로 나눕니다. 페이지는 물리 주소 공간 또는 외부 저장소와 맵핑될 수 있습니다. 이 고정 크기는 `x86_64` 리눅스 커널에서는 4096 바이트 입니다. 선형 주소에서 물리 주소로 변환을 수행하기 위해 특별한 구조체가 사용됩니다. 각 구조체는 `4096` 바이트이고 `512`개의 엔트리를 포함합니다(`PAE`와 `IA32_EFER.LME` 모드일 때만).
 
 ```assembly
 leal	pgtable(%ebx), %eax
