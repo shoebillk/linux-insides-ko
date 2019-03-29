@@ -18,27 +18,28 @@
 
 인텔 매뉴얼에는 아래와 같이 설정되어 있습니다:
 
-> Paging provides a mechanism for implementing a conventional demand-paged, virtual-memory system where sections of a program’s execution environment are mapped into physical memory as needed.
+> 페이징은 프로그램의 실행 환경의 섹션이 필요에 따라 물리 메모리로 맵핑되는 기존 요구 페이지 가상 메모리 시스템을 구현하기 위한 메커니즘을 제공합니다.
 
+그래서... 이 포스트에는 페이징 이면의 이론을 설명하려고 합니다. 물론 리눅스 커널의 `x86_64` 버전에 밀접한 관련이 있지만, 너무 세부적인 부분까지는 (적어도 이 포스트에서는) 설명하지 않습니다.
 
-So... In this post I will try to explain the theory behind paging. Of course it will be closely related to the `x86_64` version of the Linux kernel, but we will not go into too much details (at least in this post).
-
-Enabling paging
+페이징 활성화
 --------------------------------------------------------------------------------
 
-There are three paging modes:
+세 가지 페이징 모드가 있습니다:
 
-* 32-bit paging;
-* PAE paging;
-* IA-32e paging.
+* 32-비트 페이징;
+* PAE 페이징;
+* IA-32e 페이징.
 
-We will only explain the last mode here. To enable the `IA-32e paging` paging mode we need to do following things:
+여기서는 마지막 모드에 대해서만 설명합니다. `IA-32e paging` 페이징 모드를 활성화 하기 위해서는 다음과 같이 해야 합니다:
 
-* set the `CR0.PG` bit;
-* set the `CR4.PAE` bit;
-* set the `IA32_EFER.LME` bit.
+* `CR0.PG` 비트 셋팅;
+* `CR4.PAE` 비트 셋팅;
+* `IA32_EFER.LME` 비트 셋팅 .
 
-We already saw where those bits were set in [arch/x86/boot/compressed/head_64.S](https://github.com/torvalds/linux/blob/16f73eb02d7e1765ccab3d2018e0bd98eb93d973/arch/x86/boot/compressed/head_64.S):
+
+우리는 이미 [arch/x86/boot/compressed/head_64.S](https://github.com/torvalds/linux/blob/16f73eb02d7e1765ccab3d2018e0bd98eb93d973/arch/x86/boot/compressed/head_64.S)에서 이 비트들을 보았습니다:
+
 
 ```assembly
 movl	$(X86_CR0_PG | X86_CR0_PE), %eax
